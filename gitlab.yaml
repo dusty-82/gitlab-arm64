@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gitlab
+  name: gitlab
+  namespace: gitlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab
+  template:
+    metadata:
+      labels:
+        app: gitlab
+    spec:
+      containers:
+      - image: dusty82/gitlab-arm64:16.9.1-ce
+        name: gitlab
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gitlab
+  name: gitlab
+  namespace: gitlab
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  selector:
+    app: gitlab
