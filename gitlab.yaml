@@ -1,3 +1,21 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-volume-data
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 20Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,6 +36,9 @@ spec:
       containers:
       - image: dusty82/gitlab-arm64:16.9.1-ce
         name: gitlab
+        volumeMounts:
+          - name: gitlab-volume
+            mountPath: /var/opt/gitlab
         ports:
         - containerPort: 80
           name: http
@@ -25,6 +46,10 @@ spec:
         - containerPort: 443
           name: https
           protocol: TCP
+      volumes:
+        - name: gitlab-volume
+          persistentVolumeClaim:
+            claimName: gitlab-volume-data
 ---
 apiVersion: v1
 kind: Service
