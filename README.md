@@ -1,4 +1,4 @@
-# git clone https://github.com/dusty-82/gitlab-arm64
+$ git clone https://github.com/dusty-82/gitlab-arm64
 
 # cd gitlab-arm64
 
