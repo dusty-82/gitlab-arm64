@@ -21,3 +21,7 @@ $ docker push dusty82/gitlab-arm64:$RELEASE_VERSION-ce
 
 # Modifica la versione dell'imagine nel file manifest e applicalo
 $ kubectl apply -f gitlab.yaml
+
+# Reset Password Gitlab
+$ kubectl -n gitlab exec -ti pods/gitlab-58c4b99949-x8gzv -- bash
+$ gitlab-rake "gitlab:password:reset[root]"
